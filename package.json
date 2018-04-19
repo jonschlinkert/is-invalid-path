@@ -20,6 +20,7 @@
     "test": "mocha"
   },
   "devDependencies": {
+    "gulp-format-md": "^1.0.0",
     "mocha": "^3.5.3"
   },
   "keywords": [
@@ -48,5 +49,24 @@
     "test",
     "valid",
     "validate"
-  ]
+  ],
+  "verb": {
+    "toc": false,
+    "layout": "default",
+    "tasks": [
+      "readme"
+    ],
+    "plugins": [
+      "gulp-format-md"
+    ],
+    "related": {
+      "list": [
+        "is-glob",
+        "is-windows"
+      ]
+    },
+    "lint": {
+      "reflinks": true
+    }
+  }
 }
