@@ -1,7 +1,7 @@
 {
   "name": "is-invalid-path",
   "description": "Returns true if a windows file path has invalid characters.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "homepage": "https://github.com/jonschlinkert/is-invalid-path",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/is-invalid-path",
