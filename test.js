@@ -1,70 +1,46 @@
-/*!
- * is-invalid-path <https://github.com/jonschlinkert/is-invalid-path>
- *
- * Copyright (c) 2014-2015, Jon Schlinkert.
- * Licensed under the MIT License.
- */
-
 'use strict';
 
-require('should');
-var isInvalid = require('./');
+require('mocha');
+const assert = require('assert');
+const isInvalid = require('./');
 
-describe('isInvalid', function () {
-  it('should return `false` if the path is valid:', function () {
-    isInvalid('.').should.be.false;
-    isInvalid('aa').should.be.false;
-    isInvalid('abc.js').should.be.false;
-    isInvalid('abc/def/ghi.js').should.be.false;
+describe('isInvalid', function() {
+  it('should be invalid if the path is not a string', function() {
+    assert(isInvalid());
+    assert(isInvalid({}));
+    assert(isInvalid(null));
+    assert(isInvalid([]));
   });
 
-  it('should return `true` if it is a glob pattern:', function () {
-    isInvalid('*.js').should.be.true;
-    isInvalid('!*.js').should.be.true;
-    isInvalid('!foo').should.be.true;
-    isInvalid('!foo.js').should.be.true;
-    isInvalid('**/abc.js').should.be.true;
-    isInvalid('abc/*.js').should.be.true;
+  it('should be invalid if the path has invalid characters', function() {
+    assert(isInvalid('<abc'));
+    assert(isInvalid('>abc'));
+    assert(isInvalid(':abc'));
+    assert(isInvalid('"abc'));
+    assert(isInvalid('|abc'));
+    assert(isInvalid('?abc'));
+    assert(isInvalid('*abc'));
   });
 
-  it('should return `true` if the path has brace characters:', function () {
-    isInvalid('abc/{a,b}.js').should.be.true;
-    isInvalid('abc/{a..z}.js').should.be.true;
-    isInvalid('abc/{a..z..2}.js').should.be.true;
+  it('should be invalid if the path has slashes and options.file is true', function() {
+    assert(isInvalid('foo/abc', { file: true }));
+    assert(isInvalid('foo\\abc', { file: true }));
   });
 
-  it('should return `true` if it has an extglob:', function () {
-    isInvalid('abc/@(a).js').should.be.true;
-    isInvalid('abc/!(a).js').should.be.true;
-    isInvalid('abc/+(a).js').should.be.true;
-    isInvalid('abc/*(a).js').should.be.true;
-    isInvalid('abc/?(a).js').should.be.true;
-  });
-
-  it('should return `true` if it has extglob characters:', function () {
-    isInvalid('abc/@.js').should.be.true;
-    isInvalid('abc/!.js').should.be.true;
-    isInvalid('abc/+.js').should.be.true;
-    isInvalid('abc/*.js').should.be.true;
-    isInvalid('abc/?.js').should.be.true;
-  });
-
-  it('should return `true` if the path has regex characters:', function () {
-    isInvalid('abc/(aaa|bbb).js').should.be.true;
-    isInvalid('abc/?.js').should.be.true;
-    isInvalid('?.js').should.be.true;
-    isInvalid('[abc].js').should.be.true;
-    isInvalid('[^abc].js').should.be.true;
-    isInvalid('a/b/c/[a-z].js').should.be.true;
-    isInvalid('[a-j]*[^c]b/c').should.be.true;
-  });
-
-  it('should return `true` if it is not a string:', function () {
-    isInvalid().should.be.true;
-    isInvalid({}).should.be.true;
-    isInvalid(null).should.be.true;
-    isInvalid(['**/*.js']).should.be.true;
-    isInvalid(['foo.js']).should.be.true;
+  it('should not be invalid if path has valid characters', function() {
+    assert(!isInvalid('.'));
+    assert(!isInvalid('abc'));
+    assert(!isInvalid('a\'bc'));
+    assert(!isInvalid('a\\bc'));
+    assert(!isInvalid('a/bc'));
+    assert(!isInvalid('!foo'));
+    assert(!isInvalid('^abc'));
+    assert(!isInvalid('[abc]'));
+    assert(!isInvalid('(a)'));
+    assert(!isInvalid('+abc'));
+    assert(!isInvalid('@abc'));
+    assert(!isInvalid('{a}bc'));
+    assert(!isInvalid('{a..b..c}'));
   });
 });
 

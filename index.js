@@ -1,15 +1,31 @@
 /*!
- * is-invalid-path <https://github.com/jonschlinkert/is-invalid-path>
+ * is-invalid-path <git://github.com/jonschlinkert/is-invalid-path.git>
  *
- * Copyright (c) 2015, Jon Schlinkert.
- * Licensed under the MIT License.
+ * Copyright (c) 2015, 2018, Jon Schlinkert.
+ * Released under the [object Object] License.
  */
 
 'use strict';
 
-var isGlob = require('is-glob');
-var re = /[‘“!#$%&+^<=>`]/;
+const path = require('path');
+const isWindows = (opts = {}) => process.platform !== 'win32' || opts.windows === true;
 
-module.exports = function (str) {
-  return (typeof str !== 'string') || isGlob(str) || re.test(str);
+module.exports = function(fp, options = {}) {
+  if (fp === '' || typeof fp !== 'string') return true;
+  if (!isWindows(options)) return true;
+
+  // https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx#maxpath
+  const MAX_PATH = options.extended ? 32767 : 260;
+  if (typeof fp !== 'string' || fp.length > (MAX_PATH - 12)) {
+    return true;
+  }
+
+  const rootPath = path.parse(fp).root;
+  if (rootPath) fp = fp.slice(rootPath.length);
+
+  // https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx#Naming_Conventions
+  if (options.file) {
+    return /[<>:"/\\|?*]/.test(fp);
+  }
+  return /[<>:"|?*]/.test(fp);
 };
