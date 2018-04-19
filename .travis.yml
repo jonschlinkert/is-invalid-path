@@ -5,7 +5,6 @@ os:
 language: node_js
 node_js:
   - node
-  - iojs
   - '9'
   - '8'
   - '7'

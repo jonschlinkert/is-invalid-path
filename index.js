@@ -1,8 +1,8 @@
 /*!
- * is-invalid-path <git://github.com/jonschlinkert/is-invalid-path.git>
+ * is-invalid-path <https://github.com/jonschlinkert/is-invalid-path>
  *
- * Copyright (c) 2015, 2018, Jon Schlinkert.
- * Released under the [object Object] License.
+ * Copyright (c) 2015-2018, Jon Schlinkert.
+ * Released under the MIT License.
  */
 
 'use strict';
