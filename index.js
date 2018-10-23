@@ -8,7 +8,7 @@
 'use strict';
 
 const path = require('path');
-const isWindows = (opts = {}) => process.platform !== 'win32' || opts.windows === true;
+const isWindows = (opts = {}) => process.platform === 'win32' || opts.windows === true;
 
 module.exports = function(fp, options = {}) {
   if (fp === '' || typeof fp !== 'string') return true;
